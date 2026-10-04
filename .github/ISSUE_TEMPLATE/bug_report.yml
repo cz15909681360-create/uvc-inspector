@@ -1,0 +1,30 @@
+name: 问题报告
+description: 报告采集、测量或界面问题
+title: '[Bug] '
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境
+      description: 应用版本、Windows 版本、FFmpeg 版本；界面问题请写显示缩放。
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 重现步骤
+      description: 设备型号及所选编码/像素格式/尺寸/帧率，或演示模式操作步骤。
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望与实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: 必要诊断信息
+      description: 只附必要片段；遮盖个人路径、设备唯一标识和相机画面，不要上传令牌。
+      render: text

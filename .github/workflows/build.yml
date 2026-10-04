@@ -1,0 +1,65 @@
+name: Windows build and UI checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: '1'
+      DOTNET_NOLOGO: '1'
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build, core checks and portable package
+        shell: pwsh
+        run: ./build.ps1 -Test -Package
+      - name: Native WPF render and resize checks (no camera)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $exe = Join-Path $PWD 'artifacts/UvcInspector-v2.0.1-win-x64/UvcInspector.exe'
+          $cases = @(
+            @{ Name = 'normal'; Arguments = @() },
+            @{ Name = 'empty'; Arguments = @('--empty', '--width', '1040', '--height', '720') },
+            @{ Name = 'error'; Arguments = @('--error-demo') },
+            @{ Name = 'large'; Arguments = @('--width', '2048', '--height', '1232', '--layout-check') }
+          )
+          foreach ($case in $cases) {
+            $png = Join-Path $PWD ('artifacts/ui-' + $case.Name + '.png')
+            $arguments = @('--demo', '--capture', ('"' + $png + '"')) + $case.Arguments
+            $process = Start-Process -FilePath $exe -ArgumentList $arguments -WindowStyle Hidden -PassThru
+            if (-not $process.WaitForExit(60000)) {
+              Stop-Process -Id $process.Id -Force
+              throw ('UI capture timed out: ' + $case.Name)
+            }
+            if ($process.ExitCode -ne 0) { throw ('UI check failed: ' + $case.Name + ', exit ' + $process.ExitCode) }
+          }
+      - name: Save portable package and UI evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: windows-build-and-ui
+          retention-days: 14
+          if-no-files-found: error
+          path: |
+            artifacts/*.zip
+            artifacts/ui-*.png
+            artifacts/ui-*.png.bindings.txt
+            artifacts/ui-*.png.layout.json

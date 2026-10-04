@@ -1,0 +1,18 @@
+name: 功能建议
+description: 提议新功能或界面改进
+title: '[Feature] '
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: 当前遇到什么问题
+      description: 说明实际使用场景。
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议的行为
+      description: 可附示意图或替代方案，请隐藏个人信息。
+    validations:
+      required: true
