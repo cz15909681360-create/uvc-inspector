@@ -92,7 +92,8 @@ public partial class MainWindow
     // changing the user's preferences. Used by --demo --capture ... --layout-check.
     private async Task<object> CheckWorkspaceLayoutAsync()
     {
-        double originalHeight = Height;
+        var canvas = (FrameworkElement)Content;
+        double originalHeight = canvas.Height;
         async Task SettleAsync()
         {
             await Task.Delay(100);
@@ -106,27 +107,27 @@ public partial class MainWindow
         }
         void Reset() => AutoHeightButton.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
 
-        Height = 930; Reset(); await SettleAsync();
+        canvas.Height = 930; Reset(); await SettleAsync();
         double normal = Workspace.ActualHeight;
-        Height = 1232; await SettleAsync();
+        canvas.Height = 1232; await SettleAsync();
         double large = Workspace.ActualHeight, previewBefore = PreviewSurface.ActualHeight;
-        var largeLayout = new { ActualHeight, ScrollHeight = MainScroll.ActualHeight, ContentHeight = MainContent.ActualHeight, AssignedHeight = Workspace.Height };
+        var largeLayout = new { CanvasHeight = canvas.ActualHeight, ScrollHeight = MainScroll.ActualHeight, ContentHeight = MainContent.ActualHeight, AssignedHeight = Workspace.Height };
         Drag(180); await SettleAsync();
         double dragged = Workspace.ActualHeight, previewAfter = PreviewSurface.ActualHeight;
-        Height = 1332; await SettleAsync();
+        canvas.Height = 1332; await SettleAsync();
         bool manualStable = Math.Abs(Workspace.ActualHeight - dragged) < 1;
         Drag(-10000); await SettleAsync();
         bool minimum = Math.Abs(Workspace.ActualHeight - Workspace.MinHeight) < 1;
         Drag(10000); await SettleAsync();
         bool maximum = Math.Abs(Workspace.ActualHeight - MaximumWorkspaceHeight) < 1;
-        Height = 1232; Reset(); await SettleAsync();
+        canvas.Height = 1232; Reset(); await SettleAsync();
         bool reset = Math.Abs(Workspace.ActualHeight - large) < 1;
         bool healthy = large > normal + 150 && Math.Abs(dragged - large - 180) < 1
             && Math.Abs(previewAfter - previewBefore - 180) < 1 && manualStable && minimum && maximum && reset;
-        Height = originalHeight; Reset(); await SettleAsync();
+        canvas.Height = originalHeight; Reset(); await SettleAsync();
         return new { Healthy = healthy, LargeLayout = largeLayout, NormalWorkspaceHeight = normal, LargeWorkspaceHeight = large,
             DraggedWorkspaceHeight = dragged, PreviewBefore = previewBefore, PreviewAfter = previewAfter,
-            ManualHeightSurvivesWindowResize = manualStable, MinimumRespected = minimum, MaximumRespected = maximum,
+            ManualHeightSurvivesViewportResize = manualStable, MinimumRespected = minimum, MaximumRespected = maximum,
             ResetRestoresAutomaticHeight = reset };
     }
 }

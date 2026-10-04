@@ -30,6 +30,11 @@ public partial class MainWindow : Window
             int widthIndex = Array.IndexOf(arguments, "--width"), heightIndex = Array.IndexOf(arguments, "--height");
             if (widthIndex >= 0 && widthIndex + 1 < arguments.Length) Width = int.Parse(arguments[widthIndex + 1]);
             if (heightIndex >= 0 && heightIndex + 1 < arguments.Length) Height = int.Parse(arguments[heightIndex + 1]);
+            // CI desktops may cap native window dimensions. Allocate the requested
+            // WPF canvas explicitly so capture/layout checks do not depend on the monitor.
+            var canvas = (FrameworkElement)Content;
+            canvas.Width = Width;
+            canvas.Height = Height;
         }
         if (smokeIndex >= 0)
         {
