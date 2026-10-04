@@ -34,9 +34,10 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Self-contained publish failed.' }
         $licenseDirectory = Join-Path $publishDirectory 'licenses'
         New-Item -ItemType Directory -Force -Path $licenseDirectory | Out-Null
-        foreach ($name in @('README.md', 'VERIFICATION.md', 'CHANGELOG.md', 'LICENSE', 'LICENSE-STATUS.md')) {
+        foreach ($name in @('README.md', 'VERIFICATION.md', 'CHANGELOG.md', 'LICENSE', 'LICENSE-STATUS.md', 'THIRD-PARTY-NOTICES.md', 'CONTRIBUTING.md', 'SECURITY.md')) {
             Copy-Item -LiteralPath (Join-Path $projectRoot $name) -Destination $publishDirectory -Force
         }
+        Copy-Item -LiteralPath (Join-Path $projectRoot 'docs') -Destination $publishDirectory -Recurse -Force
         Copy-Item -LiteralPath (Join-Path $projectRoot 'THIRD-PARTY-NOTICES.md') -Destination $licenseDirectory -Force
         $sdkDirectory = Split-Path $DotnetPath -Parent
         foreach ($name in @('LICENSE.txt', 'ThirdPartyNotices.txt')) {
