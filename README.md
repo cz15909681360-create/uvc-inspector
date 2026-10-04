@@ -15,14 +15,14 @@ Windows 原生桌面检测工具。2.0 版使用 C# / WPF 重建，直接在窗�
 
 - 系统：Windows 10 / 11 x64。
 - 下载：[最新发行版](https://github.com/cz15909681360-create/uvc-inspector/releases/latest)。
-- 采集引擎：独立安装带 DirectShow 支持的 FFmpeg，或点击“选择引擎”指定已有 `ffmpeg.exe`。发布包不包含 FFmpeg。
+- 采集引擎：2.1.0 起主 EXE 内置 FFmpeg 8.1.3，无需另外安装。首次使用自动解出经过 SHA-256 校验的引擎，之后复用缓存。
 - 源码开发需要 .NET 10 SDK；下载的 Windows 自包含程序不需要另外安装 .NET。
 
-没有 FFmpeg 的机器可以先检查界面：`UvcInspector.exe --demo`。演示模式不访问相机，禁用真实采集与报告导出。
+没有相机的机器可以先检查界面：`UvcInspector.exe --demo`。演示模式不访问相机，禁用真实采集与报告导出。
 
 ## 使用
 
-解压完整的 `UvcInspector-v2.0.1-win-x64.zip`，双击 `UvcInspector.exe`。如果包中有 `tools` 文件夹，请保留它；程序会优先使用其中的 FFmpeg。主程序已包含 .NET 运行时，不需要安装 Python 或 .NET。
+解压完整的 `UvcInspector-v2.1.0-win-x64.zip`，双击 `UvcInspector.exe`。主程序包含 .NET 运行时和 FFmpeg，不需要安装 Python、.NET 或 FFmpeg。`licenses/ffmpeg` 提供内置引擎的源码归档、LGPL 许可证、构建命令与工具链记录。
 
 1. 点击“刷新设备”，选择视频源。
 2. 在“设备支持模式”中选择一行。编码、像素格式、尺寸、帧率分别列出；驱动的尺寸范围完整保留。
@@ -34,7 +34,9 @@ Windows 原生桌面检测工具。2.0 版使用 C# / WPF 重建，直接在窗�
 
 模式列表与实时画面默认随窗口高度增大。上下拖动这两个区域底部的手柄可同时调整高度，手动高度会保存供下次使用；点击“自适应高度”恢复随窗口调整。手柄也支持键盘方向键（20 px）、PageUp/PageDown（100 px），Home 恢复自适应。画面保持比例，区域超过窗口高度时可滚动页面。
 
-如果找不到 FFmpeg，点击“选择引擎”指定 `ffmpeg.exe`。引擎必须能运行并带 DirectShow 支持。查找顺序：已保存的指定路径、程序的 `tools` 文件夹、程序同目录、PATH、当前用户 WinGet Gyan.FFmpeg 目录。
+默认使用内置引擎，支持 RAW、MJPEG、H.264、HEVC 的检测及解码预览。内置构建没有 libx264/libx265 编码器，本软件测试复制原视频包，并不需要它们。需要额外格式时，可点击“选择引擎”指定兼容 DirectShow 的外部 `ffmpeg.exe`；已明确指定且存在的路径优先于内置引擎。
+
+内置引擎缓存位于 `%LOCALAPPDATA%\UvcInspector\engines`，按完整 SHA-256 分目录。启动会校验缓存；损坏的缓存自动从 EXE 修复。缓存被删除后，下次启动自动重建，无需联网。
 
 设置和意外错误记录位于 `%LOCALAPPDATA%\UvcInspector`。关闭会议软件、OBS 等其他相机占用后再测试。设备切换、刷新、预览、测试相互协调，窗口关闭后没有后台网页服务残留。
 
@@ -60,7 +62,7 @@ Windows 原生桌面检测工具。2.0 版使用 C# / WPF 重建，直接在窗�
 ./build.ps1 -Package
 ```
 
-集成检查需 PATH 中的完整 FFmpeg，使用临时生成视频验证 RAW/MJPEG/H.264/HEVC 测量、取消、超时与 MJPEG 图像流，不自动打开真实相机。单独的本机硬件检查为：
+旧的完整集成检查需 PATH 中带 libx264/libx265 编码器的 FFmpeg，使用临时生成视频验证 RAW/MJPEG/H.264/HEVC 测量、取消、超时与 MJPEG 图像流，不自动打开真实相机。内置引擎有独立的提取/校验、四种格式的复制测量与 JPEG 预览、进程取消检查，见开发指南。单独的本机硬件检查为：
 
 ```powershell
 dotnet run --project tests/UvcInspector.Tests -c Release -- --integration --hardware

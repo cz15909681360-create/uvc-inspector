@@ -48,11 +48,11 @@ try {
             $engineVersion = & $EnginePath -version 2>&1
             if ($LASTEXITCODE -ne 0 -or $engineVersion[0] -notmatch '^ffmpeg version 8\.1\.3') { throw 'Bundled engine must be the project FFmpeg 8.1.3 build.' }
             $engineLicense = (& $EnginePath -L 2>&1) -join "`n"
-            if ($LASTEXITCODE -ne 0 -or $engineLicense -notmatch 'GNU Lesser General Public License') { throw 'Expected the LGPL-only project engine.' }
+            if ($LASTEXITCODE -ne 0 -or $engineLicense -notmatch 'GNU Lesser General Public\s+License') { throw 'Expected the LGPL-only project engine.' }
             New-Item -ItemType Directory -Force -Path (Join-Path $projectRoot 'artifacts') | Out-Null
             $hashPath = Join-Path $projectRoot 'artifacts/embedded-ffmpeg.sha256'
             (Get-FileHash -LiteralPath $EnginePath).Hash.ToLowerInvariant() | Set-Content -LiteralPath $hashPath -Encoding ascii
-            $engineArguments = @('-p:BundledEnginePath=' + $EnginePath, '-p:BundledEngineHashPath=' + $hashPath)
+            $engineArguments = @("-p:BundledEnginePath=$EnginePath", "-p:BundledEngineHashPath=$hashPath")
         }
         $publishDirectory = Join-Path $projectRoot ('artifacts\' + $releaseName)
         & $DotnetPath publish 'src\UvcInspector\UvcInspector.csproj' -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=false -p:DebugType=embedded -o $publishDirectory --nologo @engineArguments

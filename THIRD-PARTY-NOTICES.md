@@ -7,15 +7,21 @@ Windows x64 便携包以自包含方式发布，包含 Microsoft .NET 与 Window
 - [Runtime 源码与许可证](https://github.com/dotnet/runtime)
 - [WPF 源码与许可证](https://github.com/dotnet/wpf)
 
-## FFmpeg
+## 内置 FFmpeg 8.1.3
 
-FFmpeg 为独立子进程，不作为库链接进入应用。普通源码工程不包含 FFmpeg；带 `tools/ffmpeg.exe` 的本地便携包包含未修改的已安装 Gyan.dev 8.1.1 full build，其配置启用 GPL 和 version3。发行包保存原构建 LICENSE、README、版本/配置、SHA-256，并在可用时附上对应 FFmpeg 8.1.1 源码归档。
+2.1.0 的 Windows EXE 内嵌项目从 FFmpeg 8.1.3 原始源码构建的 Windows x64 独立命令行程序。运行时解出引擎并通过管道调用；不修改 FFmpeg 源码、不静态链接 FFmpeg 库到 C# 工程。
 
-- [FFmpeg 许可说明](https://ffmpeg.org/legal.html)
-- [FFmpeg 8.1.1 源码](https://ffmpeg.org/releases/ffmpeg-8.1.1.tar.xz)
-- [所用发行构建及外部库说明](https://www.gyan.dev/ffmpeg/builds/)
-- [发行方使用的外部库构建工程](https://github.com/m-ab-s/media-autobuild_suite)
+构建未启用 GPL、nonfree 或额外编解码库，适用 LGPL-2.1-or-later。包含 DirectShow、RAW/MJPEG/H.264/HEVC 解码、原视频包复制、缩放和 MJPEG 预览；不含 libx264/libx265 编码器或网络协议。应用自身源码仍按 MIT 发布。
 
-FFmpeg 的附加编解码库各自有许可与源码要求。以上材料记录当前本地包依赖，不代表已完成公开分发全部依赖的许可审核；将引擎一并公开发布前需按实际构建整理完整的第三方材料，或者让用户使用已有的合规安装。
+发行包 `licenses/ffmpeg` 提供：
 
-这些许可不替代本项目源代码的许可决定。
+- 官方 `ffmpeg-8.1.3.tar.xz` 原始源码归档及 LGPL/FFmpeg 许可文件。
+- `build-engine.sh`、实际 configure 命令、交叉编译器与 Debian 包版本记录。
+- MinGW 和 GCC 原始版权信息，以及 PE 导入依赖记录。
+- 内置可执行文件的 SHA-256、版本输出和实际许可输出。
+
+源码归档固定 SHA-256：`7138d28c96d9d3e3af4ee3d8cad72741f8ffb40da90c1112235dea3ecd3178a3`。构建脚本校验下载内容；发布时与引擎一同提供源码，而不只提供上游链接。
+
+官方资料：[FFmpeg 源码](https://ffmpeg.org/releases/ffmpeg-8.1.3.tar.xz)、[FFmpeg 许可说明](https://ffmpeg.org/legal.html)、[MinGW-w64](https://www.mingw-w64.org/)、[GCC Runtime Library Exception](https://www.gnu.org/licenses/gcc-exception-3.1.html)。
+
+用户明确指定的外部 FFmpeg 可能有不同配置与许可证，该文件不对外部安装授予许可。2.0.1 的公开发行包未包含 FFmpeg。

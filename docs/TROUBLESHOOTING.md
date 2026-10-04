@@ -2,7 +2,7 @@
 
 ## 找不到检测引擎
 
-点击“选择引擎”指定 `ffmpeg.exe`，或把已有 FFmpeg 的 bin 目录加入 PATH 后重新打开程序。公开下载包不包含 FFmpeg。程序会检查引擎可运行且包含 DirectShow；只有图标或界面启动成功不代表采集引擎已经可用。
+2.1.0 的公开下载包已经内置 FFmpeg。确认运行的是新版 EXE；如果内置资源校验失败，请重新下载发行包。缓存位于 `%LOCALAPPDATA%\UvcInspector\engines`，程序会自动修复损坏缓存。使用外部引擎时，点击“选择引擎”指定 `ffmpeg.exe`；该引擎必须可运行且包含 DirectShow。
 
 ## 找不到摄像头
 

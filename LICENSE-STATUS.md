@@ -4,4 +4,4 @@
 
 MIT 授权适用于本仓库的原生 C# / WPF 工程及项目文档，不是对旧 EXE 的许可证声明。本仓库不分发旧 EXE、提取的旧程序内容或真实相机数据。
 
-第三方运行时与检测引擎的许可证独立适用，说明及打包通知见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) 和发行包 `licenses`。公开的 Windows 下载包包含 .NET 运行时，不包含 FFmpeg；FFmpeg 由用户独立安装。
+第三方运行时与检测引擎的许可证独立适用，说明及打包通知见 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) 和发行包 `licenses`。2.1.0 起公开包内置 FFmpeg 8.1.3 的 LGPL-2.1-or-later 精简构建，并提供对应源码、版权材料和可重复执行的构建脚本；项目 MIT 授权不替代这些第三方许可。
