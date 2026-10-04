@@ -7,9 +7,13 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>UvcInspector</AssemblyName>
-    <Version>2.0.1</Version>
+    <Version>2.1.0</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>../../assets/App.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup><ProjectReference Include="../UvcInspector.Core/UvcInspector.Core.csproj" /><Resource Include="../../assets/App.ico" Link="App.ico" /></ItemGroup>
+  <ItemGroup Condition="'$(BundledEnginePath)' != ''">
+    <EmbeddedResource Include="$(BundledEnginePath)" LogicalName="UvcInspector.Engine.ffmpeg.exe" />
+    <EmbeddedResource Include="$(BundledEngineHashPath)" LogicalName="UvcInspector.Engine.sha256" />
+  </ItemGroup>
 </Project>

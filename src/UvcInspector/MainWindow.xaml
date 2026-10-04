@@ -10,7 +10,7 @@
             <Border Width="40" Height="40" CornerRadius="11" Background="#2563EB" Margin="0,0,12,0"><TextBlock Text="U" FontSize="23" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
             <StackPanel><TextBlock Text="UVC INSPECTOR" Foreground="White" FontWeight="SemiBold" FontSize="16"/><TextBlock Text="编码与码流检测" Foreground="#A5B7D4" Margin="0,4,0,0" FontSize="12"/></StackPanel>
           </StackPanel>
-          <Border Background="#213858" CornerRadius="6" Padding="9,6" Margin="0,19,0,0" HorizontalAlignment="Left"><TextBlock Text="原生桌面版  /  2.0.1" Foreground="#BBD3FF" FontSize="11"/></Border>
+          <Border Background="#213858" CornerRadius="6" Padding="9,6" Margin="0,19,0,0" HorizontalAlignment="Left"><TextBlock Text="原生桌面版  /  2.1.0" Foreground="#BBD3FF" FontSize="11"/></Border>
         </StackPanel>
         <StackPanel DockPanel.Dock="Bottom" Margin="0,18,0,0">
           <Border Background="#1B3150" CornerRadius="9" Padding="12"><StackPanel><TextBlock Text="检测引擎" Foreground="#A5B7D4" FontSize="11"/><TextBlock Text="{Binding EngineText}" Foreground="#D6E5FE" FontSize="11" Margin="0,6,0,0" LineHeight="17"/></StackPanel></Border>

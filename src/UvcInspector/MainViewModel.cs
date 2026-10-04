@@ -139,12 +139,12 @@ public sealed class MainViewModel : INotifyPropertyChanged
     {
         SetState("检查引擎", "正在查找 FFmpeg 并枚举 DirectShow 视频源。", "#2563EB");
         var preferred = Settings.Load().FfmpegPath;
-        string? path = FfmpegEngine.FindExecutable(preferred);
+        string? path = await BundledEngine.ResolveAsync(preferred, token);
         if (path is null) throw new InvalidOperationException("未找到 FFmpeg。请点击“选择引擎”指定 ffmpeg.exe，或使用包含 tools 文件夹的完整便携包。");
         engine = new FfmpegEngine(path);
         var info = await engine.InspectAsync(token);
         if (!info.DirectShowAvailable) { engine = null; throw new InvalidOperationException("该 FFmpeg 没有 DirectShow 支持，请选择完整 Windows 构建。"); }
-        EngineText = info.Version.Split(" Copyright", StringSplitOptions.None)[0];
+        EngineText = (BundledEngine.IsBundledPath(path) ? "内置 · " : "") + info.Version.Split(" Copyright", StringSplitOptions.None)[0];
         AppendLog($"引擎路径：{path}");
         var devices = await engine.DevicesAsync(token);
         var previous = SelectedDevice?.Identifier;
@@ -307,7 +307,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         if (dialog.ShowDialog() != true) return Task.CompletedTask;
         try
         {
-            var report = new { AppVersion = "2.0.1", MeasurementCompletedAt = measurementCompletedAt, ExportedAt = DateTimeOffset.Now, Engine = engine?.Executable, Device = resultRequest?.Device, Request = resultRequest, Result = result,
+            var report = new { AppVersion = "2.1.0", MeasurementCompletedAt = measurementCompletedAt, ExportedAt = DateTimeOffset.Now, Engine = engine?.Executable, Device = resultRequest?.Device, Request = resultRequest, Result = result,
                 MeasurementScope = "采集端视频包有效字节与媒体时间戳；不包含 USB 协议开销；压缩包不解码验证。" };
             if (Path.GetExtension(dialog.FileName).Equals(".csv", StringComparison.OrdinalIgnoreCase))
             {

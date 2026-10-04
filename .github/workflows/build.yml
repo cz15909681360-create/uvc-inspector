@@ -14,7 +14,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - name: Install cross compiler and fixture generator
+        run: sudo apt-get update && sudo apt-get install -y gcc-mingw-w64-x86-64-posix binutils-mingw-w64-x86-64 mingw-w64-common make curl xz-utils ffmpeg
+      - name: Build LGPL-only Windows FFmpeg from pinned source
+        run: bash scripts/build-engine.sh
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: ffmpeg-windows
+          path: .tools/engine/
+          include-hidden-files: true
+          retention-days: 7
   windows:
+    needs: engine
     runs-on: windows-latest
     timeout-minutes: 20
     env:
@@ -27,14 +45,25 @@ jobs:
       - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
         with:
           dotnet-version: '10.0.x'
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
+        with:
+          name: ffmpeg-windows
+          path: .tools/engine
       - name: Build, core checks and portable package
         shell: pwsh
-        run: ./build.ps1 -Test -Package
+        run: ./build.ps1 -Test -Package -BundleEngine
+      - name: Embedded engine extraction, repair, codecs and preview checks
+        shell: pwsh
+        run: |
+          $exe = Join-Path $PWD 'artifacts/UvcInspector-v2.1.0-win-x64/UvcInspector.exe'
+          $p = Start-Process -FilePath $exe -ArgumentList '--engine-check artifacts/engine-check.json --fixtures .tools/engine/fixtures' -WindowStyle Hidden -PassThru
+          if (-not $p.WaitForExit(120000)) { Stop-Process -Id $p.Id -Force; throw 'Embedded engine check timed out.' }
+          if ($p.ExitCode -ne 0) { Get-Content artifacts/engine-check.json; throw 'Embedded engine check failed.' }
       - name: Native WPF render and resize checks (no camera)
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          $exe = Join-Path $PWD 'artifacts/UvcInspector-v2.0.1-win-x64/UvcInspector.exe'
+          $exe = Join-Path $PWD 'artifacts/UvcInspector-v2.1.0-win-x64/UvcInspector.exe'
           $cases = @(
             @{ Name = 'normal'; Arguments = @() },
             @{ Name = 'empty'; Arguments = @('--empty', '--width', '1040', '--height', '720') },
@@ -53,7 +82,7 @@ jobs:
           }
       - name: Save portable package and UI evidence
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: windows-build-and-ui
           retention-days: 14
@@ -63,3 +92,4 @@ jobs:
             artifacts/ui-*.png
             artifacts/ui-*.png.bindings.txt
             artifacts/ui-*.png.layout.json
+            artifacts/engine-check.json
