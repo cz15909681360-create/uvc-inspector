@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>UvcInspector</AssemblyName>
-    <Version>2.1.0</Version>
+    <Version>2.1.1</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>../../assets/App.ico</ApplicationIcon>
   </PropertyGroup>

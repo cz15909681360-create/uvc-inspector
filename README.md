@@ -14,7 +14,8 @@ Windows 原生桌面检测工具。2.0 版使用 C# / WPF 重建，直接在窗�
 ## 下载与环境
 
 - 系统：Windows 10 / 11 x64。
-- 下载：[最新发行版](https://github.com/cz15909681360-create/uvc-inspector/releases/latest)。
+- 版本：2.1.1。
+- 下载：[单文件 EXE 或完整便携 ZIP](https://github.com/cz15909681360-create/uvc-inspector/releases/latest)。
 - 采集引擎：2.1.0 起主 EXE 内置 FFmpeg 8.1.3，无需另外安装。首次使用自动解出经过 SHA-256 校验的引擎，之后复用缓存。
 - 源码开发需要 .NET 10 SDK；下载的 Windows 自包含程序不需要另外安装 .NET。
 
@@ -22,7 +23,7 @@ Windows 原生桌面检测工具。2.0 版使用 C# / WPF 重建，直接在窗�
 
 ## 使用
 
-解压完整的 `UvcInspector-v2.1.0-win-x64.zip`，双击 `UvcInspector.exe`。主程序包含 .NET 运行时和 FFmpeg，不需要安装 Python、.NET 或 FFmpeg。`licenses/ffmpeg` 提供内置引擎的源码归档、LGPL 许可证、构建命令与工具链记录。
+可直接运行 `UvcInspector-v2.1.1-win-x64.exe`，也可完整解压 `UvcInspector-v2.1.1-win-x64.zip` 后运行其中的 `UvcInspector.exe`。主程序包含 .NET 运行时和 FFmpeg，不需要安装 Python、.NET 或 FFmpeg。`licenses/ffmpeg` 提供内置引擎的源码归档、LGPL 许可证、构建命令与工具链记录。
 
 1. 点击“刷新设备”，选择视频源。
 2. 在“设备支持模式”中选择一行。编码、像素格式、尺寸、帧率分别列出；驱动的尺寸范围完整保留。

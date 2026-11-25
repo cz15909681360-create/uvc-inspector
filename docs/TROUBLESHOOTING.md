@@ -2,7 +2,7 @@
 
 ## 找不到检测引擎
 
-2.1.0 的公开下载包已经内置 FFmpeg。确认运行的是新版 EXE；如果内置资源校验失败，请重新下载发行包。缓存位于 `%LOCALAPPDATA%\UvcInspector\engines`，程序会自动修复损坏缓存。使用外部引擎时，点击“选择引擎”指定 `ffmpeg.exe`；该引擎必须可运行且包含 DirectShow。
+从 2.1.0 起，公开下载包内置 FFmpeg。确认运行的是新版 EXE；如果内置资源校验失败，请重新下载发行包。缓存位于 `%LOCALAPPDATA%\UvcInspector\engines`，程序会自动修复损坏缓存。使用外部引擎时，点击“选择引擎”指定 `ffmpeg.exe`；该引擎必须可运行且包含 DirectShow。
 
 ## 找不到摄像头
 

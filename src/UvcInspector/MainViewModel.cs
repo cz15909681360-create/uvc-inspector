@@ -307,7 +307,7 @@ public sealed class MainViewModel : INotifyPropertyChanged
         if (dialog.ShowDialog() != true) return Task.CompletedTask;
         try
         {
-            var report = new { AppVersion = "2.1.0", MeasurementCompletedAt = measurementCompletedAt, ExportedAt = DateTimeOffset.Now, Engine = engine?.Executable, Device = resultRequest?.Device, Request = resultRequest, Result = result,
+            var report = new { AppVersion = "2.1.1", MeasurementCompletedAt = measurementCompletedAt, ExportedAt = DateTimeOffset.Now, Engine = engine?.Executable, Device = resultRequest?.Device, Request = resultRequest, Result = result,
                 MeasurementScope = "采集端视频包有效字节与媒体时间戳；不包含 USB 协议开销；压缩包不解码验证。" };
             if (Path.GetExtension(dialog.FileName).Equals(".csv", StringComparison.OrdinalIgnoreCase))
             {

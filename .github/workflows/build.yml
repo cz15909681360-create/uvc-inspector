@@ -55,7 +55,7 @@ jobs:
       - name: Embedded engine extraction, repair, codecs and preview checks
         shell: pwsh
         run: |
-          $exe = Join-Path $PWD 'artifacts/UvcInspector-v2.1.0-win-x64/UvcInspector.exe'
+          $exe = Join-Path $PWD 'artifacts/UvcInspector-v2.1.1-win-x64/UvcInspector.exe'
           $p = Start-Process -FilePath $exe -ArgumentList '--engine-check artifacts/engine-check.json --fixtures .tools/engine/fixtures' -WindowStyle Hidden -PassThru
           if (-not $p.WaitForExit(120000)) { Stop-Process -Id $p.Id -Force; throw 'Embedded engine check timed out.' }
           if ($p.ExitCode -ne 0) { Get-Content artifacts/engine-check.json; throw 'Embedded engine check failed.' }
@@ -63,7 +63,7 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          $exe = Join-Path $PWD 'artifacts/UvcInspector-v2.1.0-win-x64/UvcInspector.exe'
+          $exe = Join-Path $PWD 'artifacts/UvcInspector-v2.1.1-win-x64/UvcInspector.exe'
           $cases = @(
             @{ Name = 'normal'; Arguments = @() },
             @{ Name = 'empty'; Arguments = @('--empty', '--width', '1040', '--height', '720') },

@@ -38,7 +38,7 @@ build.ps1                  构建、验证和便携包脚本
 
 # 自包含发布程序的界面检查，不访问相机
 ./build.ps1 -Package
-./artifacts/UvcInspector-v2.1.0-win-x64/UvcInspector.exe --demo --capture ui.png --width 2048 --height 1232 --layout-check
+./artifacts/UvcInspector-v2.1.1-win-x64/UvcInspector.exe --demo --capture ui.png --width 2048 --height 1232 --layout-check
 ```
 
 测试项目是自带断言的控制台程序，使用 `dotnet run --project tests/UvcInspector.Tests -c Release` 执行；不要用 `dotnet test` 代替。失败会返回非零退出码。
@@ -64,12 +64,12 @@ build.ps1                  构建、验证和便携包脚本
 内置引擎检查不使用 PATH 或已安装 FFmpeg，也不访问相机：
 
 ```powershell
-./artifacts/UvcInspector-v2.1.0-win-x64/UvcInspector.exe --engine-check artifacts/engine-check.json --fixtures .tools/engine/fixtures
+./artifacts/UvcInspector-v2.1.1-win-x64/UvcInspector.exe --engine-check artifacts/engine-check.json --fixtures .tools/engine/fixtures
 ```
 
 检查并发提取、隔离缓存损坏修复、DirectShow 能力、四种合成视频的复制测量/JPEG 解码和进程取消。测试缓存位于报告旁的 `engine-check-cache`，不修改用户实际引擎缓存；报告 Healthy 为 true、退出码为 0 表示通过。
 
-版本号当前为 2.1.0。更改版本时同步应用 csproj、界面版本、报告版本、build.ps1 包名与 README 下载文件名。
+版本号当前为 2.1.1。更改版本时同步应用 csproj、界面版本、报告版本、build.ps1 包名与 README 下载文件名。
 
 ## GitHub Actions
 

@@ -9,7 +9,7 @@ Windows x64 便携包以自包含方式发布，包含 Microsoft .NET 与 Window
 
 ## 内置 FFmpeg 8.1.3
 
-2.1.0 的 Windows EXE 内嵌项目从 FFmpeg 8.1.3 原始源码构建的 Windows x64 独立命令行程序。运行时解出引擎并通过管道调用；不修改 FFmpeg 源码、不静态链接 FFmpeg 库到 C# 工程。
+自 2.1.0 起，Windows EXE 内嵌项目从 FFmpeg 8.1.3 原始源码构建的 Windows x64 独立命令行程序。运行时解出引擎并通过管道调用；不修改 FFmpeg 源码、不静态链接 FFmpeg 库到 C# 工程。
 
 构建未启用 GPL、nonfree 或额外编解码库，适用 LGPL-2.1-or-later。包含 DirectShow、RAW/MJPEG/H.264/HEVC 解码、原视频包复制、缩放和 MJPEG 预览；不含 libx264/libx265 编码器或网络协议。应用自身源码仍按 MIT 发布。
 
